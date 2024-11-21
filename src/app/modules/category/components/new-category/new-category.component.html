@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>Nueva categoria</h2>
+<mat-dialog-content>
+  <div class="container_input">
+    <mat-form-field>
+      <mat-label>Nombre</mat-label>
+      <input matInput [(ngModel)]="name" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Descripción</mat-label>
+      <input matInput [(ngModel)]="description" />
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="notSave()">Cancelar</button>
+  <button
+    mat-button
+    [disabled]="!name || !description"
+    (click)="saveCategory()"
+  >
+    Guardar
+  </button>
+</mat-dialog-actions>

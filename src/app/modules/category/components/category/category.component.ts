@@ -1,10 +1,23 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import {
+  ApiResponse,
   Category,
   CategoryService,
 } from 'src/app/modules/shared/services/category.service';
+import { NewCategoryComponent } from '../new-category/new-category.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+export interface DialogData {
+  animal: string;
+  name: string;
+}
 
 @Component({
   selector: 'app-category',
@@ -12,12 +25,14 @@ import {
   styleUrls: ['./category.component.scss'],
 })
 export class CategoryComponent implements OnInit {
+  private readonly categoryService = inject(CategoryService);
+  public dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
   displayedColumns: string[] = ['id', 'name', 'description', 'actions'];
   dataSource = new MatTableDataSource<Category>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private readonly categoryService: CategoryService) {}
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
@@ -27,16 +42,34 @@ export class CategoryComponent implements OnInit {
   }
 
   getCategories(): void {
-    this.categoryService.getCategories().subscribe((response) => {
+    this.categoryService.getCategories().subscribe((response: ApiResponse) => {
       this.processCategoryResponse(response);
     });
   }
 
-  processCategoryResponse(response: any): void {
+  processCategoryResponse(response: ApiResponse): void {
     if (response.metadata[0].code === '200') {
       let listCategories = response.categoriaResponse.categorias;
 
       this.dataSource.data = listCategories;
     }
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(NewCategoryComponent, {});
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
+      if (result === 1) {
+        this.snackBar.open('Categoria Creada!', 'Exito', {
+          duration: 2000,
+        });
+        this.getCategories();
+      } else if (result === 2) {
+        this.snackBar.open('Error al guardar la categoria!', 'Error', {
+          duration: 2000,
+        });
+      }
+    });
   }
 }

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface Category {
-  id: number;
+  id?: number;
   name: string;
   description: string;
 }
@@ -14,9 +14,13 @@ export interface Metadata {
   code: string;
 }
 
-export interface categoriaResponse {
-  metadata: Metadata[];
+export interface CategoriaResponse {
   categorias: Category[];
+}
+
+export interface ApiResponse {
+  metadata: Metadata[];
+  categoriaResponse: CategoriaResponse;
 }
 
 @Injectable({
@@ -26,7 +30,11 @@ export class CategoryService {
   baseUrl = 'http://localhost:8080/api/v1';
   constructor(private readonly http: HttpClient) {}
 
-  getCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(`${this.baseUrl}/categorias`);
+  getCategories(): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.baseUrl}/categorias`);
+  }
+
+  postCategorie(body: Category): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.baseUrl}/categorias`, body);
   }
 }
