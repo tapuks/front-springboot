@@ -41,4 +41,8 @@ export class CategoryService {
   putCategorie(id: number, body: Category): Observable<ApiResponse> {
     return this.http.put<ApiResponse>(`${this.baseUrl}/categorias/${id}`, body);
   }
+
+  deleteCategorie(id: number): Observable<ApiResponse> {
+    return this.http.delete<ApiResponse>(`${this.baseUrl}/categorias/${id}`);
+  }
 }

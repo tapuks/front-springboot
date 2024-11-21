@@ -89,4 +89,21 @@ export class CategoryComponent implements OnInit {
       }
     });
   }
+
+  delete(element: Category): void {
+    const { id } = element;
+    this.categoryService.deleteCategorie(id ?? 0).subscribe({
+      next: () => {
+        this.snackBar.open('Categoria Eliminada!', 'Exito', {
+          duration: 2000,
+        });
+        this.getCategories();
+      },
+      error: () => {
+        this.snackBar.open('Error al eliminar la categoria!', 'Error', {
+          duration: 2000,
+        });
+      },
+    });
+  }
 }
