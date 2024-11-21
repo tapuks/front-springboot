@@ -14,11 +14,6 @@ import {
 import { NewCategoryComponent } from '../new-category/new-category.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-export interface DialogData {
-  animal: string;
-  name: string;
-}
-
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
@@ -55,8 +50,10 @@ export class CategoryComponent implements OnInit {
     }
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(NewCategoryComponent, {});
+  newCategorie(): void {
+    const dialogRef = this.dialog.open(NewCategoryComponent, {
+      width: '400px',
+    });
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
@@ -67,6 +64,26 @@ export class CategoryComponent implements OnInit {
         this.getCategories();
       } else if (result === 2) {
         this.snackBar.open('Error al guardar la categoria!', 'Error', {
+          duration: 2000,
+        });
+      }
+    });
+  }
+
+  edit(element: Category): void {
+    const dialogRef = this.dialog.open(NewCategoryComponent, {
+      data: element,
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 1) {
+        this.snackBar.open('Categoria Actualizada!', 'Exito', {
+          duration: 2000,
+        });
+        this.getCategories();
+      } else if (result === 2) {
+        this.snackBar.open('Error al actualizar la categoria!', 'Error', {
           duration: 2000,
         });
       }

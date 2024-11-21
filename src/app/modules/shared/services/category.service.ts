@@ -37,4 +37,8 @@ export class CategoryService {
   postCategorie(body: Category): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(`${this.baseUrl}/categorias`, body);
   }
+
+  putCategorie(id: number, body: Category): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`${this.baseUrl}/categorias/${id}`, body);
+  }
 }
