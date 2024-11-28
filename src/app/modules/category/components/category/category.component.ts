@@ -7,7 +7,7 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import {
-  ApiResponse,
+  ApiResponseCategory,
   Category,
   CategoryService,
 } from 'src/app/modules/shared/services/category.service';
@@ -37,12 +37,14 @@ export class CategoryComponent implements OnInit {
   }
 
   getCategories(): void {
-    this.categoryService.getCategories().subscribe((response: ApiResponse) => {
-      this.processCategoryResponse(response);
-    });
+    this.categoryService
+      .getCategories()
+      .subscribe((response: ApiResponseCategory) => {
+        this.processCategoryResponse(response);
+      });
   }
 
-  processCategoryResponse(response: ApiResponse): void {
+  processCategoryResponse(response: ApiResponseCategory): void {
     if (response.metadata[0].code === '200') {
       let listCategories = response.categoriaResponse.categorias;
 
@@ -113,7 +115,7 @@ export class CategoryComponent implements OnInit {
     } else {
       const id = parseInt(word);
       this.categoryService.getCategoyById(id).subscribe(
-        (response: ApiResponse) => {
+        (response: ApiResponseCategory) => {
           this.processCategoryResponse(response);
         },
         () => {

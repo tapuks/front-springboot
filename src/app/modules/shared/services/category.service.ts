@@ -18,7 +18,7 @@ export interface CategoriaResponse {
   categorias: Category[];
 }
 
-export interface ApiResponse {
+export interface ApiResponseCategory {
   metadata: Metadata[];
   categoriaResponse: CategoriaResponse;
 }
@@ -28,25 +28,36 @@ export interface ApiResponse {
 })
 export class CategoryService {
   baseUrl = 'http://localhost:8080/api/v1';
+
   constructor(private readonly http: HttpClient) {}
 
-  getCategories(): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(`${this.baseUrl}/categorias`);
+  getCategories(): Observable<ApiResponseCategory> {
+    return this.http.get<ApiResponseCategory>(`${this.baseUrl}/categorias`);
   }
 
-  getCategoyById(id: number): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(`${this.baseUrl}/categorias/${id}`);
+  getCategoyById(id: number): Observable<ApiResponseCategory> {
+    return this.http.get<ApiResponseCategory>(
+      `${this.baseUrl}/categorias/${id}`
+    );
   }
 
-  postCategorie(body: Category): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(`${this.baseUrl}/categorias`, body);
+  postCategorie(body: Category): Observable<ApiResponseCategory> {
+    return this.http.post<ApiResponseCategory>(
+      `${this.baseUrl}/categorias`,
+      body
+    );
   }
 
-  putCategorie(id: number, body: Category): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(`${this.baseUrl}/categorias/${id}`, body);
+  putCategorie(id: number, body: Category): Observable<ApiResponseCategory> {
+    return this.http.put<ApiResponseCategory>(
+      `${this.baseUrl}/categorias/${id}`,
+      body
+    );
   }
 
-  deleteCategorie(id: number): Observable<ApiResponse> {
-    return this.http.delete<ApiResponse>(`${this.baseUrl}/categorias/${id}`);
+  deleteCategorie(id: number): Observable<ApiResponseCategory> {
+    return this.http.delete<ApiResponseCategory>(
+      `${this.baseUrl}/categorias/${id}`
+    );
   }
 }
