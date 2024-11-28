@@ -106,4 +106,22 @@ export class CategoryComponent implements OnInit {
       },
     });
   }
+
+  search(word: string): void {
+    if (word.length === 0) {
+      this.getCategories();
+    } else {
+      const id = parseInt(word);
+      this.categoryService.getCategoyById(id).subscribe(
+        (response: ApiResponse) => {
+          this.processCategoryResponse(response);
+        },
+        () => {
+          this.snackBar.open('Categoria no encontrada!', 'Error', {
+            duration: 2000,
+          });
+        }
+      );
+    }
+  }
 }
