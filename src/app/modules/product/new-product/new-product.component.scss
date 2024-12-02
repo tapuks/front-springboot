@@ -1,0 +1,30 @@
+.container_input {
+    display: flex;
+    flex-direction: column;
+
+}
+
+/* Ocultar flechas de incremento y decremento en Chrome, Safari, Edge y Opera */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Ocultar flechas de incremento y decremento en Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+
+.input_file {
+    display: none;
+}
+
+.subir {
+    margin: 20px;
+    padding: 5px 16px;
+    background-color: blue;
+    color: white;
+    border: 0px solid white;
+}

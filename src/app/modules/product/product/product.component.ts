@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { NewProductComponent } from '../new-product/new-product.component';
 
 @Component({
   selector: 'app-product',
@@ -47,6 +48,25 @@ export class ProductComponent {
       error: (error) => {
         console.error('There was an error!', error);
       },
+    });
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(NewProductComponent, {
+      width: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 1) {
+        this.getProducts();
+        this.snackBar.open('Product creado correctamente', 'Cerrar', {
+          duration: 2000,
+        });
+      } else if (result === 2) {
+        this.snackBar.open('Error creating product', 'Cerrar', {
+          duration: 2000,
+        });
+      }
     });
   }
 

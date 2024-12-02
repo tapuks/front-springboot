@@ -12,6 +12,14 @@ export interface Product {
   photo: string;
 }
 
+export interface ProductBody {
+  name: string;
+  price: number;
+  cantidad: number;
+  categoryId: number;
+  photo: string;
+}
+
 export interface ProductResponse {
   products: Product[];
 }
@@ -31,5 +39,9 @@ export class ProductService {
 
   getProducts(): Observable<ApiResponseProduct> {
     return this.http.get<ApiResponseProduct>(`${this.baseUrl}/products`);
+  }
+
+  postProduct(product: ProductBody): Observable<Product> {
+    return this.http.post<Product>(`${this.baseUrl}/products`, product);
   }
 }
