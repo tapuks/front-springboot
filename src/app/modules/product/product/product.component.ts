@@ -70,6 +70,56 @@ export class ProductComponent {
     });
   }
 
+  edit(product: Product): void {
+    const dialogRef = this.dialog.open(NewProductComponent, {
+      width: '600px',
+      data: product,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 1) {
+        this.getProducts();
+        this.snackBar.open('Product edited successfully', 'Cerrar', {
+          duration: 2000,
+        });
+      } else if (result === 2) {
+        this.snackBar.open('Error editing product', 'Cerrar', {
+          duration: 2000,
+        });
+      }
+    });
+  }
+
+  delete(id: number): void {
+    this.productService.deleteProduct(id).subscribe({
+      next: () => {
+        this.getProducts();
+        this.snackBar.open('Product deleted successfully', 'Cerrar', {
+          duration: 2000,
+        });
+      },
+      error: (error) => {
+        console.error('There was an error!', error);
+      },
+    });
+  }
+
+  search(word: string): void {
+    if (word === '') {
+      this.getProducts();
+      return;
+    }
+    const wordNumber = parseInt(word);
+    this.productService.getProductsById(wordNumber).subscribe({
+      next: (response: ApiResponseProduct) => {
+        this.processProductResponse(response);
+      },
+      error: (error) => {
+        console.error('There was an error!', error);
+      },
+    });
+  }
+
   processProductResponse(response: ApiResponseProduct): void {
     if (response.metadata[0].code === '200') {
       let listProducts = response.productResponse.products;

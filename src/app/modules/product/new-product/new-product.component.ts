@@ -35,11 +35,14 @@ export class NewProductComponent implements OnInit {
   private readonly categoriesService = inject(CategoryService);
   private readonly productService = inject(ProductService);
   readonly dialogRef = inject(MatDialogRef<NewProductComponent>);
-  readonly data = inject<Category>(MAT_DIALOG_DATA);
+  readonly data = inject<Product>(MAT_DIALOG_DATA);
 
   ngOnInit(): void {
     this.createForm();
     this.loadCategories();
+    if (this.data) {
+      this.setData();
+    }
   }
 
   createForm(): void {
@@ -49,6 +52,16 @@ export class NewProductComponent implements OnInit {
       cantidad: new FormControl<number>(1, Validators.required),
       categoria: new FormControl<number | null>(null, Validators.required),
       photo: new FormControl<File | null>(null, Validators.required),
+    });
+  }
+
+  setData(): void {
+    this.formProduct.patchValue({
+      name: this.data.name,
+      price: this.data.price,
+      cantidad: this.data.cantidad,
+      categoria: this.data.categoria.id,
+      // photo: this.data.photo,
     });
   }
 
@@ -72,7 +85,7 @@ export class NewProductComponent implements OnInit {
   }
 
   notSave(): void {
-    console.log('Not save');
+    this.dialogRef.close(0);
   }
 
   onFileSelected(event: Event): void {
@@ -103,13 +116,26 @@ export class NewProductComponent implements OnInit {
     uploadData.append('photo', product.photo, product.photo.name);
     uploadData.append('categoryId', product.categoryId.toString());
 
-    this.productService.postProduct(uploadData as any).subscribe({
-      next: () => {
-        this.dialogRef.close(1);
-      },
-      error: (error) => {
-        console.error('There was an error!', error);
-      },
-    });
+    if (this.data) {
+      this.productService
+        .putProduct(this.data.id as number, uploadData as any)
+        .subscribe({
+          next: () => {
+            this.dialogRef.close(1);
+          },
+          error: (error) => {
+            console.error('There was an error!', error);
+          },
+        });
+    } else {
+      this.productService.postProduct(uploadData as any).subscribe({
+        next: () => {
+          this.dialogRef.close(1);
+        },
+        error: (error) => {
+          console.error('There was an error!', error);
+        },
+      });
+    }
   }
 }
