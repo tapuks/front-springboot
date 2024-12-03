@@ -109,8 +109,8 @@ export class ProductComponent {
       this.getProducts();
       return;
     }
-    const wordNumber = parseInt(word);
-    this.productService.getProductsById(wordNumber).subscribe({
+
+    this.productService.getProductsByName(word).subscribe({
       next: (response: ApiResponseProduct) => {
         this.processProductResponse(response);
       },

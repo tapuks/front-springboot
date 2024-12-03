@@ -45,6 +45,12 @@ export class ProductService {
     return this.http.get<ApiResponseProduct>(`${this.baseUrl}/products/${id}`);
   }
 
+  getProductsByName(name: string): Observable<ApiResponseProduct> {
+    return this.http.get<ApiResponseProduct>(
+      `${this.baseUrl}/products/filter/${name}`
+    );
+  }
+
   postProduct(product: ProductBody): Observable<Product> {
     return this.http.post<Product>(`${this.baseUrl}/products`, product);
   }
