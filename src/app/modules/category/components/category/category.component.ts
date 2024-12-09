@@ -13,6 +13,7 @@ import {
 } from 'src/app/modules/shared/services/category.service';
 import { NewCategoryComponent } from '../new-category/new-category.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { catchError, debounceTime, of, Subject, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-category',
@@ -25,6 +26,7 @@ export class CategoryComponent implements OnInit {
   private snackBar = inject(MatSnackBar);
   displayedColumns: string[] = ['id', 'name', 'description', 'actions'];
   dataSource = new MatTableDataSource<Category>([]);
+  searchTerm: Subject<string> = new Subject<string>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -34,6 +36,7 @@ export class CategoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCategories();
+    this.subscrtiptionSearch();
   }
 
   getCategories(): void {
@@ -109,21 +112,32 @@ export class CategoryComponent implements OnInit {
     });
   }
 
-  search(word: string): void {
-    if (word.length === 0) {
-      this.getCategories();
-    } else {
-      const id = parseInt(word);
-      this.categoryService.getCategoyById(id).subscribe(
-        (response: ApiResponseCategory) => {
-          this.processCategoryResponse(response);
-        },
-        () => {
-          this.snackBar.open('Categoria no encontrada!', 'Error', {
-            duration: 2000,
-          });
-        }
-      );
-    }
+  search(event: Event): void {
+    const { value } = event.target as HTMLInputElement;
+    this.searchTerm.next(value);
+  }
+
+  subscrtiptionSearch(): void {
+    this.searchTerm
+      .pipe(
+        debounceTime(500),
+        switchMap((term: string) => {
+          if (term.length === 0) {
+            return this.categoryService.getCategories();
+          } else {
+            return this.categoryService.getCategoyById(term).pipe(
+              catchError(() => {
+                this.snackBar.open('Categoria no encontrada!', 'Error', {
+                  duration: 2000,
+                });
+                return of();
+              })
+            );
+          }
+        })
+      )
+      .subscribe((response: any) => {
+        this.processCategoryResponse(response);
+      });
   }
 }

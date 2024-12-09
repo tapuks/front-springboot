@@ -35,7 +35,7 @@ export class CategoryService {
     return this.http.get<ApiResponseCategory>(`${this.baseUrl}/categorias`);
   }
 
-  getCategoyById(id: number): Observable<ApiResponseCategory> {
+  getCategoyById(id: string): Observable<ApiResponseCategory> {
     return this.http.get<ApiResponseCategory>(
       `${this.baseUrl}/categorias/${id}`
     );

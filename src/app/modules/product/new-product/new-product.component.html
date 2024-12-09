@@ -1,0 +1,53 @@
+<h2 mat-dialog-title>{{ !data ? "Nuevo producto" : "Editar producto" }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="formProduct">
+    <div class="container_input">
+      <mat-form-field>
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="name" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Precio</mat-label>
+        <input matInput formControlName="price" type="number" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Cantidad</mat-label>
+        <input matInput formControlName="cantidad" type="number" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Categoría</mat-label>
+        <mat-select formControlName="categoria">
+          <mat-option
+            *ngFor="let category of categories$ | async"
+            [value]="category.id"
+          >
+            {{ category.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div>
+        <mat-label>Foto</mat-label>
+        <label for="file-upload" class="subir"> Subir archivo </label>
+        <span>{{ nameImg }}</span>
+        <br />
+        <input
+          class="input_file"
+          type="file"
+          id="file-upload"
+          (change)="onFileSelected($event)"
+          accept="image/*"
+          formControlName="photo"
+        />
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="notSave()">Cancelar</button>
+  <button mat-button [disabled]="formProduct.invalid" (click)="save()">
+    Guardar
+  </button>
+</mat-dialog-actions>
