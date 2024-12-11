@@ -60,4 +60,10 @@ export class CategoryService {
       `${this.baseUrl}/categorias/${id}`
     );
   }
+
+  exportCategories(): Observable<Blob> {
+    return this.http.get<Blob>(`${this.baseUrl}/categorias/export/excel`, {
+      responseType: 'blob' as 'json',
+    });
+  }
 }

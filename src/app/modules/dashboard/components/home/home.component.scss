@@ -1,0 +1,23 @@
+.grafico {
+  text-align: center;
+  margin-top: 4px;
+
+  .chartContainer {
+    margin: 25px;
+    height: 90%;
+    // width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    canvas {
+      max-height: 250px;
+      width: auto;
+    }
+  }
+}
+
+.margin-t50 {
+  margin-top: 50px;
+}

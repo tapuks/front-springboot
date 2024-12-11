@@ -140,4 +140,28 @@ export class CategoryComponent implements OnInit {
         this.processCategoryResponse(response);
       });
   }
+
+  exportExcel(): void {
+    this.categoryService.exportCategories().subscribe(
+      (data) => {
+        const blob = new Blob([data], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        });
+        const url = window.URL.createObjectURL(blob);
+        let anchor = document.createElement('a');
+        anchor.download = 'categorias.xlsx';
+        anchor.href = url;
+        anchor.click();
+
+        this.snackBar.open('Exportando categorias!', 'Exito', {
+          duration: 2000,
+        });
+      },
+      () => {
+        this.snackBar.open('Error al exportar categorias!', 'Error', {
+          duration: 2000,
+        });
+      }
+    );
+  }
 }

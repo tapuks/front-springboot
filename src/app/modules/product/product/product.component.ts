@@ -131,4 +131,28 @@ export class ProductComponent {
       console.log('datasourceeeeeeeeeeeeee', this.dataSource);
     }
   }
+
+  exportExcel(): void {
+    this.productService.exportProducts().subscribe(
+      (data) => {
+        const blob = new Blob([data], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        });
+        const url = window.URL.createObjectURL(blob);
+        let anchor = document.createElement('a');
+        anchor.download = 'products.xlsx';
+        anchor.href = url;
+        anchor.click();
+
+        this.snackBar.open('Exportando productos!', 'Exito', {
+          duration: 2000,
+        });
+      },
+      () => {
+        this.snackBar.open('Error al exportar productos!', 'Error', {
+          duration: 2000,
+        });
+      }
+    );
+  }
 }

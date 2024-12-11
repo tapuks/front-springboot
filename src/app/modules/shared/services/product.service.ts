@@ -62,4 +62,10 @@ export class ProductService {
   deleteProduct(id: number): Observable<Product> {
     return this.http.delete<Product>(`${this.baseUrl}/products/${id}`);
   }
+
+  exportProducts(): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/products/export/excel`, {
+      responseType: 'blob',
+    });
+  }
 }
